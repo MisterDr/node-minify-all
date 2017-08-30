@@ -3,7 +3,7 @@ var fs = require("fs");
 var path = require("path");
 var input = process.argv;
 var inputDir = input[2];
-//var inputMinType = input[4] || "css";
+var inputTypes = input[4] || "css";
 var outFile = input[3] || "out";
 var compressor = require("node-minify");
 var uglifycss = require("uglifycss");
@@ -22,14 +22,14 @@ var walk = function(currentDirPath, callback) {
             walk(filePath, callback);
         }
     });    
-
-    if (jsFiles.length > 0)
+    
+    if (jsFiles.length > 0 && inputTypes.indexOf("js") != -1)
     {
         var uglifiedJs = uglifyjs.processFiles(jsFiles);
         fs.writeFile(outFile + ".min.js", uglified);
     }
 
-    if (cssFiles.length > 0)
+    if (cssFiles.length > 0 && inputTypes.indexOf("css") != -1)
     {
         var uglified = uglifycss.processFiles(cssFiles);
         fs.writeFile(outFile + ".min.css", uglified);
